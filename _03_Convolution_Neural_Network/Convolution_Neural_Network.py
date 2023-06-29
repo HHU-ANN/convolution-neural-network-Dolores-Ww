@@ -10,13 +10,19 @@ from torch.utils.data import DataLoader
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
-        self.resnet18 = torchvision.models.resnet18(pretrained=True)
-        for param in self.resnet18.parameters():
-            param.requires_grad = False
-        self.fc = nn.Linear(512, 10)
+        # Define your model architecture here
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
+        self.relu = nn.ReLU()
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc = nn.Linear(16 * 8 * 8, 10)
 
     def forward(self, x):
-        x = self.resnet18(x)
+        # Implement the forward pass of your model
+        x = self.conv1(x)
+        x = self.relu(x)
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
         return x
 
 def read_data():
@@ -28,7 +34,7 @@ def read_data():
 
 def main():
     model = NeuralNetwork()  # 若有参数则传入参数
-    
+    dataset_train,dataset_val,data_loader_train,data_loader_val = read_data()
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'))
