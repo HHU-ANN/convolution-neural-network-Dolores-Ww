@@ -20,7 +20,7 @@ class NeuralNetwork(nn.Module):
     # 冻结ResNet中的参数，避免训练时梯度反向传递影响到预训练的模型
         for param in self.resnet18.parameters():
             param.requires_grad = False   # 重新定义ResNet的输出层
-        self.resnet18.fc = nn.Linear(512, 10)
+        self.fc = nn.Linear(512, 10)
     
     def forward(self, x):
         x = self.resnet18(x)
@@ -89,6 +89,6 @@ def main():
     train(model, data_loader_train, data_loader_val, epochs=10, learning_rate=0.001)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    model.load_state_dict(torch.load('../pth/model.pth'))
+    model.load_state_dict(torch.load('model.pth'))  # 修改该行为加载参数的路径
     return model
     
