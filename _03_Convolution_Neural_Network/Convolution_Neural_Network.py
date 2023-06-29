@@ -25,26 +25,28 @@ class NeuralNetwork(nn.Module):
 
         self.fc = nn.Linear(28* 28 * 256, 10) # Output layer
 
-    def forward(self, x):
-        # Implement the forward pass of your neural network here
+   def forward(self, x):
+    # Implement the forward pass of your neural network here
 
-        x = self.conv1(x)
-        x = self.relu1(x)
-        x = self.pool1(x)
+    x = self.conv1(x)
+    x = self.relu1(x)
+    x = self.pool1(x)
 
-        x = self.conv2(x)
-        x = self.relu2(x)
-        x = self.pool2(x)
+    x = self.conv2(x)
+    x = self.relu2(x)
+    x = self.pool2(x)
+    
+    x = self.conv3(x)
+    x = self.relu3(x)
+    x = self.pool3(x)
+    
+    # Calculate the final feature map size
+    feature_size = math.ceil(x.size(2) / 2 / 2 / 2)  # Divide by 2 for every pooling layer
+    
+    x = x.view(-1, feature_size * feature_size * 256)  # Flatten the input tensor
+    x = self.fc(x)
 
-        x = self.conv3(x)
-        x = self.relu3(x)
-        x = self.pool3(x)
-
-        feature_size = math.ceil(x.size(3) / 2 / 2 / 2)  # Divide by 2 for every pooling layer
-        x = x.view(-1, feature_size * feature_size * 256)  # Flatten the input tensor
-        x = self.fc(x)
-
-        return x
+    return x
 
 
 
