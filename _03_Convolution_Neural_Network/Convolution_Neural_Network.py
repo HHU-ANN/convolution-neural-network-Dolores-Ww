@@ -20,7 +20,7 @@ class NeuralNetwork(nn.Module):
     # 冻结ResNet中的参数，避免训练时梯度反向传递影响到预训练的模型
         for param in self.resnet18.parameters():
             param.requires_grad = False   # 重新定义ResNet的输出层
-        self.fc = nn.Linear(512, 10)
+        self.resnet18.fc = nn.Linear(512, 10)
     
     def forward(self, x):
         x = self.resnet18(x)
