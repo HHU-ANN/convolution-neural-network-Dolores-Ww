@@ -10,7 +10,7 @@ class NeuralNetwork(nn.Module):
 
         # Define your neural network architecture here
 
-        self.conv1 = nn.Conv2d(in_channels=4, out_channels=64, kernel_size=4, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=4, padding=1)
         self.relu1 = nn.ReLU()
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
