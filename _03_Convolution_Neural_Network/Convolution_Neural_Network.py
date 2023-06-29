@@ -35,6 +35,7 @@ def read_data():
 def main():
     model = NeuralNetwork()  # 若有参数则传入参数
     dataset_train,dataset_val,data_loader_train,data_loader_val = read_data()
+    torch.save(model.state_dict(),'../pth/model.pth')
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'))
