@@ -32,13 +32,18 @@ def read_data():
     data_loader_val = DataLoader(dataset=dataset_val, batch_size=256, shuffle=False)
     return dataset_train, dataset_val, data_loader_train, data_loader_val
 
+
 def main():
     model = NeuralNetwork()  # 若有参数则传入参数
-    dataset_train,dataset_val,data_loader_train,data_loader_val = read_data()
-    torch.save(model.state_dict(),'../pth/model.pth')
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.dirname(current_dir)
-    model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'))
+    dataset_train, dataset_val, data_loader_train, data_loader_val = read_data()
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    model_dir = os.path.join(parent_dir, 'pth')
+    os.makedirs(model_dir, exist_ok=True)
+    model_path = os.path.join(model_dir, 'model.pth')
+    torch.save(model.state_dict(), model_path)
+    model.load_state_dict(torch.load(model_path))
     return model
 
+if __name__ == '__main__':
+    main()
     
