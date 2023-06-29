@@ -39,7 +39,8 @@ class NeuralNetwork(nn.Module):
         x = self.relu3(x)
         x = self.pool3(x)
 
-        x = x.view(-1, 28 * 28 * 256) # Flatten the input tensor
+        feature_size = math.ceil(x.size(3) / 2 / 2 / 2)  # Divide by 2 for every pooling layer
+        x = x.view(-1, feature_size * feature_size * 256)  # Flatten the input tensor
         x = self.fc(x)
 
         return x
