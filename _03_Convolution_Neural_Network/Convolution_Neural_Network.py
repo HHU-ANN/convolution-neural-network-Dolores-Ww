@@ -2,6 +2,7 @@ import os
 import torch
 import torch.nn as nn
 import torchvision
+import math
 from torch.utils.data import DataLoader
 
 class NeuralNetwork(nn.Module):
