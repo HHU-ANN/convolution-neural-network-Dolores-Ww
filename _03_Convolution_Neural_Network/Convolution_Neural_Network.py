@@ -10,19 +10,19 @@ class NeuralNetwork(nn.Module):
 
         # Define your neural network architecture here
 
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d(in_channels=4, out_channels=64, kernel_size=4, padding=1)
         self.relu1 = nn.ReLU()
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.conv2 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=4, padding=1)
         self.relu2 = nn.ReLU()
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.conv3 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=4, padding=1)
         self.relu3 = nn.ReLU()
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.fc = nn.Linear(4 * 4 * 256, 10) # Output layer
+        self.fc = nn.Linear(28* 28 * 256, 10) # Output layer
 
     def forward(self, x):
         # Implement the forward pass of your neural network here
@@ -39,7 +39,7 @@ class NeuralNetwork(nn.Module):
         x = self.relu3(x)
         x = self.pool3(x)
 
-        x = x.view(-1, 4 * 4 * 256) # Flatten the input tensor
+        x = x.view(-1, 28 * 28 * 256) # Flatten the input tensor
         x = self.fc(x)
 
         return x
