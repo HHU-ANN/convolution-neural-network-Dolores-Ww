@@ -16,9 +16,10 @@ class NeuralNetwork(nn.Module):
         x = self.conv1(x)
         x = self.relu(x)
         x = self.pool(x)
-        x = x.view(x.size(0), -1)
+        x = x.view(-1, 16 * 8 * 8)
         x = self.fc(x)
         return x
+
 
 
 def read_data():
