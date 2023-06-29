@@ -15,7 +15,19 @@ from torch.utils.data import DataLoader
     
 
 class NeuralNetwork(nn.Module):
-    pass
+    def init(self):
+        super(NeuralNetwork, self).init()
+        self.resnet18 = torchvision.models.resnet18(pretrained=True)  # 调用预训练的ResNet18模型
+    # 冻结ResNet中的参数，避免训练时梯度反向传递影响到预训练的模型
+        for param in self.resnet18.parameters():
+            param.requires_grad = False
+    # 重新定义ResNet的输出层
+        self.fc = nn.Linear(512, 10)
+
+
+def forward(self, x):
+    x = self.resnet(x)
+    return x
 
 def read_data():
     # 这里可自行修改数据预处理，batch大小也可自行调整
