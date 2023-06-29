@@ -23,11 +23,10 @@ class NeuralNetwork(nn.Module):
             param.requires_grad = False
     # 重新定义ResNet的输出层
         self.fc = nn.Linear(512, 10)
-
-
-def forward(self, x):
-    x = self.resnet18(x)
-    return x
+    
+    def forward(self, x):
+        x = self.resnet18(x)
+        return x
 
 def read_data():
     # 这里可自行修改数据预处理，batch大小也可自行调整
