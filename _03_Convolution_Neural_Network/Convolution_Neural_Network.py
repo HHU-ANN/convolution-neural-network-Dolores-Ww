@@ -33,55 +33,13 @@ def read_data():
     dataset_val = torchvision.datasets.CIFAR10(root='../data/exp03', train=False, download=False, transform=torchvision.transforms.ToTensor())
     data_loader_train = DataLoader(dataset=dataset_train, batch_size=256, shuffle=True)
     data_loader_val = DataLoader(dataset=dataset_val, batch_size=256, shuffle=False)
+      # 保存模型参数
+    torch.save(model.state_dict(), '../pth/model.pth')
     return dataset_train, dataset_val, data_loader_train, data_loader_val
 
-def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)  # 修改optimizer的参数
-    
-    for epoch in range(epochs):
-        model.train()
-        train_loss = 0.0
-        train_accuracy = 0.0
-        
-        for inputs, labels in data_loader_train:
-            optimizer.zero_grad()
-            outputs = model(inputs)  # 修改计算输出的部分
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-            
-            train_loss += loss.item() * inputs.size(0)
-            _, preds = torch.max(outputs, 1)
-            train_accuracy += torch.sum(preds == labels.data)
-            
-        train_loss = train_loss / len(data_loader_train.dataset)
-        train_accuracy = train_accuracy / len(data_loader_train.dataset)
-        
-        model.eval()
-        val_loss = 0.0
-        val_accuracy = 0.0
-        
-        with torch.no_grad():
-            for inputs, labels in data_loader_val:
-                outputs = model.resnet18(inputs)
-                loss = criterion(outputs, labels)
-                
-                val_loss += loss.item() * inputs.size(0)
-                _, preds = torch.max(outputs, 1)
-                val_accuracy += torch.sum(preds == labels.data)
-                
-        val_loss = val_loss / len(data_loader_val.dataset)
-        val_accuracy = val_accuracy / len(data_loader_val.dataset)
-        
-        print(f"Epoch {epoch+1}/{epochs}")
-        print(f"Train Loss: {train_loss:.4f} Train Accuracy: {train_accuracy:.4f}")
-        print(f"Val Loss: {val_loss:.4f} Val Accuracy: {val_accuracy:.4f}")
-        print()
-    
-    # 保存模型参数
-    torch.save(model.state_dict(), '../pth/model.pth')
 
+    
+  
     
 def main():
     dataset_train, dataset_val, data_loader_train, data_loader_val = read_data()
