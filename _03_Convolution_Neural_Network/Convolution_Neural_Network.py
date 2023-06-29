@@ -37,7 +37,7 @@ def read_data():
 
 def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.fc.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)  # 修改optimizer的参数
     
     for epoch in range(epochs):
         model.train()
@@ -46,7 +46,7 @@ def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
         
         for inputs, labels in data_loader_train:
             optimizer.zero_grad()
-            outputs = model.resnet18(inputs)
+            outputs = model(inputs)  # 修改计算输出的部分
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
