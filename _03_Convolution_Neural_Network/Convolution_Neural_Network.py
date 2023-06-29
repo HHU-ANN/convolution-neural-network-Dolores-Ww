@@ -23,7 +23,7 @@ class NeuralNetwork(nn.Module):
         self.relu3 = nn.ReLU()
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.fc = nn.Linear(8 * 8 * 256, 10) # Output layer
+        self.fc = nn.Linear(16 * 8 * 128, 10) # Output layer
 
     def forward(self, x):
         # Implement the forward pass of your neural network here
@@ -41,7 +41,7 @@ class NeuralNetwork(nn.Module):
         x = self.pool3(x)
 
         
-        x = x.view(-1, 8 * 8* 256) # Flatten the input tensor
+        x = x.view(-1, 16 * 8* 128) # Flatten the input tensor
         x = self.fc(x)
 
         return x
