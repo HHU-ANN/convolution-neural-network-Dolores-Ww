@@ -27,16 +27,11 @@ def read_data():
     return dataset_train, dataset_val, data_loader_train, data_loader_val
 
 def main():
-    dataset_train, dataset_val, data_loader_train, data_loader_val = read_data()
-    model = NeuralNetwork()
-
-    # 保存模型参数
-    path = '../pth/model.pth'
-    torch.save(model.state_dict(), path)
-
-    # 加载模型参数
-    model.load_state_dict(torch.load(path))
-
+    model = NeuralNetwork()  # 若有参数则传入参数
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'))
     return model
 
     
