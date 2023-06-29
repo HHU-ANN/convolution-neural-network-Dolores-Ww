@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
     
 
 class NeuralNetwork(nn.Module):
-    def _init_(self):
+    def __init__(self):
         super(NeuralNetwork, self).init()
         self.resnet18 = torchvision.models.resnet18(pretrained=True)  # 调用预训练的ResNet18模型
     # 冻结ResNet中的参数，避免训练时梯度反向传递影响到预训练的模型
