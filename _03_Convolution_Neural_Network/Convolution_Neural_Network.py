@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
     
 
 class NeuralNetwork(nn.Module):
-    def init(self):
+    def _init_(self):
         super(NeuralNetwork, self).init()
         self.resnet18 = torchvision.models.resnet18(pretrained=True)  # 调用预训练的ResNet18模型
     # 冻结ResNet中的参数，避免训练时梯度反向传递影响到预训练的模型
@@ -26,7 +26,7 @@ class NeuralNetwork(nn.Module):
 
 
 def forward(self, x):
-    x = self.resnet(x)
+    x = self.resnet18(x)
     return x
 
 def read_data():
@@ -40,7 +40,7 @@ def read_data():
 
 def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    optimizer = optim.Adam(model.fc.parameters(), lr=learning_rate)
     
     for epoch in range(epochs):
         model.train()
@@ -49,7 +49,7 @@ def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
         
         for inputs, labels in data_loader_train:
             optimizer.zero_grad()
-            outputs = model(inputs)
+            outputs = model.resnet18(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -67,7 +67,7 @@ def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
         
         with torch.no_grad():
             for inputs, labels in data_loader_val:
-                outputs = model(inputs)
+                outputs = model.resnet18(inputs)
                 loss = criterion(outputs, labels)
                 
                 val_loss += loss.item() * inputs.size(0)
@@ -84,6 +84,7 @@ def train(model, data_loader_train, data_loader_val, epochs, learning_rate):
     
     # 保存模型参数
     torch.save(model.state_dict(), '../pth/model.pth')
+
     
 def main():
     dataset_train, dataset_val, data_loader_train, data_loader_val = read_data()
@@ -91,6 +92,6 @@ def main():
     train(model, data_loader_train, data_loader_val, epochs=10, learning_rate=0.001)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    model.load_state_dict(torch.load(parent_dir + '/pth/model.pth'))
+    model.load_state_dict(torch.load('../pth/model.pth'))
     return model
     
