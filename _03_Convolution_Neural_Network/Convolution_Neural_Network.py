@@ -26,7 +26,7 @@ class NeuralNetwork(nn.Module):
         self.relu3 = nn.ReLU()
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.fc = nn.Linear(4 * 4 * 256, 1) # Output layer
+        self.fc = nn.Linear(4 * 4 * 256, 2) # Output layer
 
     def forward(self, x):
         # Implement the forward pass of your neural network here
