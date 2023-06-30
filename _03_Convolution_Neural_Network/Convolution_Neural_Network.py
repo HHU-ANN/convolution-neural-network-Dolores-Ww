@@ -2,6 +2,8 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torchvision.transforms as transforms
+import torchvision.datasets as datasets
 import torchvision
 import math
 from torch.utils.data import DataLoader
@@ -25,7 +27,8 @@ class NeuralNetwork(nn.Module):
         x = self.relu2(x)
         x = self.fc2(x)
         return x
-
+        
+model = NeuralNetwork()
 # 定义优化器和损失函数
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=learning_rate)
