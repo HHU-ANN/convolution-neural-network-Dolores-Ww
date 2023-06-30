@@ -31,55 +31,13 @@ class NeuralNetwork(nn.Module):
         x = self.fc2(x)
         return x
 
-
-# 加载CIFAR-10数据集
-transform = torchvision.transforms.Compose([
-    torchvision.transforms.RandomHorizontalFlip(),
-    torchvision.transforms.ToTensor(),
-    torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-])
 def read_data():
     train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True)
     test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False)
     return train_dataset,train_loader,test_dataset,test_loader
-# 初始化模型和定义损失函数与优化器
-model = NeuralNetwork()
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-train_dataset,train_loader,test_dataset,test_loader = read_data()
 
-# 训练循环
-num_epochs = 10
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = model.to(device)
-model.train()
-
-for epoch in range(num_epochs):
-    running_loss = 0.0
-    for i, data in enumerate(train_loader, 0):
-
-        inputs, labels = data
-        inputs = inputs.to(device)
-        labels = labels.to(device)
-
-        optimizer.zero_grad()
-
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-
-        running_loss += loss.item()
-
-        if i % 200 == 199:
-            print(
-                f'Epoch [{epoch + 1}/{num_epochs}], Batch [{i + 1}/{len(train_loader)}], Loss: {running_loss / 200:.4f}')
-            running_loss = 0.0
-
-# 保存模型参数
-torch.save(model.state_dict(), 'model.pth')
 
 
 def main():
