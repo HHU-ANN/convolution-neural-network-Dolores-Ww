@@ -4,6 +4,7 @@
 import os
 import torch
 import torch.nn as nn
+import torch.optim as optim
 import torchvision
 from torch.utils.data import DataLoader
 
@@ -56,6 +57,43 @@ def read_data():
     data_loader_val = DataLoader(dataset=dataset_val, batch_size=1, shuffle=False)
     return dataset_train, dataset_val, data_loader_train, data_loader_val
 
+# 初始化模型和定义损失函数与优化器
+model = NeuralNetwork()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+train_dataset,train_loader,test_dataset,test_loader = read_data()
+
+
+# 训练循环
+num_epochs = 5
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = model.to(device)
+model.train()
+
+for epoch in range(num_epochs):
+    running_loss = 0.0
+    for i, data in enumerate(train_loader, 0):
+
+        inputs, labels = data
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+
+        if i % 200 == 199:
+            print(
+                f'Epoch [{epoch + 1}/{num_epochs}], Batch [{i + 1}/{len(data_loader_train)}], Loss: {running_loss / 200:.4f}')
+            running_loss = 0.0
+
+# 保存模型参数
+torch.save(model.state_dict(), 'model.pth')
 
 def main():
     model = NeuralNetwork()
